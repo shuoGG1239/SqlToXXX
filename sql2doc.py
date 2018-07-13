@@ -1,6 +1,7 @@
 import codecs
 import re
 import os
+import win32clipboard
 import natsort
 
 from docx import Document
@@ -11,6 +12,18 @@ TITLE = 'ShuoGG'
 NORMAL_FONT = '微软雅黑'
 NORMAL_FONT_SIZE = 10
 TABLE_STYLE = 'Light Grid Accent 3'
+
+
+def get_clipboard_text():
+    try:
+        win32clipboard.OpenClipboard()
+        data = win32clipboard.GetClipboardData()
+        win32clipboard.CloseClipboard()
+        return data
+    except Exception as e:
+        data = ''
+        print('clipboard unknown error!!', e)
+    return data
 
 
 class Field:
@@ -195,5 +208,24 @@ def run_transfer():
                 print(docx_file_name + '转换失败!!')
 
 
+def sql_to_doc(text):
+    global TITLE
+    path_list = get_suffixfiles_fullpath('.sql')
+    dst_folder_path = quick_mkdir('1.new docx')
+    name = 'new_new_new'
+    table_list = get_tables(text)
+    docx_file_name = name + '.docx'
+    TITLE = name
+    if gen_docx(table_list, dst_folder_path + docx_file_name):
+        print(docx_file_name + '转换成功!!')
+    else:
+        print(docx_file_name + '转换失败!!')
+
+
 if __name__ == '__main__':
-    run_transfer()
+    text = get_clipboard_text()
+    if 'create table ' in text:
+        # 直接对剪贴板的内容进行转换
+        sql_to_doc(text)
+    else:
+        run_transfer()
