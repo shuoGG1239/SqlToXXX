@@ -285,19 +285,19 @@ def get_field_type(sql_type):
     :return: str
     """
     sql_type = sql_type.lower()
-    if 'varchar' in sql_type or 'text' == sql_type:
+    if 'varchar' in sql_type or 'text' == sql_type or 'char' in sql_type or 'binary' in sql_type or 'blob' in sql_type:
         return 'String'
-    if 'bigint' in sql_type:
+    if 'bigint' in sql_type or 'fixed' in sql_type:
         return 'long'
-    if sql_type == 'int' or 'integer' in sql_type:
+    if sql_type == 'int' or 'integer' in sql_type or 'enum' in sql_type:
         return 'int'
-    if sql_type == 'tinyint':
+    if sql_type == 'tinyint' or 'bit' in sql_type:
         return 'byte'
-    if 'double' in sql_type:
+    if 'double' in sql_type or 'numeric' in sql_type or 'real' in sql_type or 'dec' in sql_type:
         return 'double'
     if 'float' in sql_type:
         return 'float'
-    if 'date' in sql_type:
+    if 'date' in sql_type or 'time' in sql_type or 'year' in sql_type:
         return 'Date'
     if 'bool' in sql_type:
         return 'boolean'
