@@ -179,7 +179,7 @@ def get_tables(sql_text):
                 per_field.is_key = True
         table_comment = 'null'
         ret_comment = re.search(
-            r'alter\stable\s%s.+\'(.+)\'' % table_name, sql_text)
+            r'alter\stable\s%s.+\'(.+)\'' % table_name.strip(), sql_text)
         if ret_comment is not None:
             table_comment = ret_comment.group(1)
         new_table.comment = table_comment

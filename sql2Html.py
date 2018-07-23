@@ -124,7 +124,7 @@ def get_tables(sql_text):
                 per_field.is_key = True
         table_comment = 'null'
         ret_comment = re.search(
-            r'alter\stable\s%s.+\'(.+)\'' % table_name, sql_text)
+            r'alter\stable\s%s.+\'(.+)\'' % table_name.strip(), sql_text)
         if ret_comment is not None:
             table_comment = ret_comment.group(1)
         new_table.comment = table_comment
@@ -177,7 +177,7 @@ def sql_to_html(sql_text):
         # 标题行
         tr_head = soup.new_tag(name='tr')
         td_head = soup.new_tag(name='th', colspan="3")
-        td_head.append(table.name)
+        td_head.append(table.name + '(' + table.comment + ')')
         tr_head.append(td_head)
         table1.append(tr_head)
         # field行
