@@ -1,6 +1,6 @@
-import codecs
+import sys
 import os
-
+import codecs
 import natsort
 
 
@@ -53,20 +53,6 @@ def write_file_content_append(file_path, text, encoding='utf8'):
         print(e)
 
 
-def mkdir_in_dir(dir_path, name):
-    """
-    当前dir_path目录下建一个文件夹
-    :param name: 文件夹名称
-    :return: 新建的文件夹的完整路径
-    """
-    new_directory = dir_path + '\\' + name + "\\"
-    try:
-        os.mkdir(dir_path + '\\' + name)
-    except Exception as e:
-        print(e)
-    return new_directory
-
-
 def quick_mkdir(name):
     """
     当前目录下建一个文件夹
@@ -88,12 +74,12 @@ def get_files_fullpath(dir_path, suffix=''):
     :param suffix: 后缀如".sql" ".java" ; 若不填则不进行文件过滤
     :return: list of str
     """
-    files = list(filter(lambda x: os.path.isfile(x), os.listdir(dir_path)))
+    files = list(filter(lambda x: os.path.isfile(os.path.join(dir_path, x)), os.listdir(dir_path)))
     if suffix != '':
         # 留下后缀为suffix的文件
         files = list(filter(lambda x: x.endswith(suffix), files))
-    all_fullpath = list(map(lambda x: os.getcwd() + '\\' + x, files))
-    return natsort.natsorted(all_fullpath)
+    all_fullpath = list(map(lambda x: os.path.join(dir_path, x), files))
+    return all_fullpath
 
 
 def get_files_fullpath_curdir(suffix=''):
@@ -103,3 +89,17 @@ def get_files_fullpath_curdir(suffix=''):
     :return: list of str
     """
     return get_files_fullpath(os.getcwd(), suffix)
+
+
+def get_dirs_fullpath(dir_path):
+    """
+     获取dir_path目录下所有文件夹的路径
+    """
+    dirs = list(filter(lambda x: os.path.isdir(os.path.join(dir_path, x)), os.listdir(dir_path)))
+    all_fullpath = list(map(lambda x: os.path.join(dir_path, x), dirs))
+    return all_fullpath
+
+
+
+if __name__ == '__main__':
+    pass
